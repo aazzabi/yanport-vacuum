@@ -282,3 +282,37 @@ svg#clouds {
     visibility: hidden;
   }
 }
+
+.map td {
+  width: 40px;
+  height: 40px;
+  text-align: center;
+}
+.northVacuum {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 20px 40px 20px;
+  border-color: transparent transparent #007bff transparent;
+}
+.eastVacuum {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 20px 0 20px 40px;
+  border-color: transparent transparent transparent #007bff;
+}
+.southVacuum {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 40px 20px 0 20px;
+  border-color: #007bff transparent transparent transparent;
+}
+.westVacuum {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 20px 40px 20px 0;
+  border-color: transparent #007bff transparent transparent;
+}

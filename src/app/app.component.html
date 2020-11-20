@@ -1,21 +1,23 @@
 <table>
   <tr>
     <td> Taille X:</td>
-    <td><input type="number" [(ngModel)]="maximumX" (change)="change()"></td>
+    <td><input type="number" [min]="0" [(ngModel)]="maximumX" (change)="change()"></td>
   </tr>
   <tr>
     <td> Taille Y:</td>
-    <td><input type="number" [(ngModel)]="maximumY" (change)="change()"></td>
+    <td><input type="number" [min]="0" [(ngModel)]="maximumY" (change)="change()"></td>
   </tr>
   <tr>
-    <td>Coordonnées :</td>
-    <td><input type="number" [max]="maximumX" [(ngModel)]="x" placeholder="X" (keyup)="checkX()"></td>
-    <td><input type="number" [max]="maximumY" [(ngModel)]="y" placeholder="Y" (keyup)="checkY()"></td>
+    <td>Coordonnées <i class="fas fa-sun"></i>:</td>
+    <td><input type="number" [min]="0" [max]="maximumX" [(ngModel)]="x" placeholder="X" [disabled]="!maximumX"
+               (change)="changeXandY()"></td>
+    <td><input type="number" [min]="0" [max]="maximumY" [(ngModel)]="y" placeholder="Y" [disabled]="!maximumY"
+               (change)="changeXandY()"></td>
   </tr>
   <tr>
     <td>Orientation :</td>
     <td>
-      <select [(ngModel)]="orientation" >
+      <select [(ngModel)]="orientation" (change)="changeXandY()" [disabled]="!x && !y">
         <option value="N">N</option>
         <option value="E">E</option>
         <option value="W">W</option>
@@ -23,16 +25,18 @@
       </select>
     </td>
   </tr>
+  <tr *ngIf="orientation && (x!=='')  && (y!=='')">
+    <td>Instructions : </td>
+    <td><input type="text" [(ngModel)]="instructions" pattern="[A-Z]*"></td>
+    <td><input type="button" (click)="go()" value="GO"></td>
+  </tr>
 </table>
 
 <div class="row" *ngIf="maximumY && maximumX">
-  <table border="1">
+  <table border="1" class="map">
     <tr *ngFor="let i of arrayX">
-      <td *ngFor="let j of arrayY">
-
-      </td>
+      <td *ngFor="let j of arrayY" id="{{i}}-{{j}}"></td>
     </tr>
   </table>
-  <!--      <td *ngFor="let v2 of map.y; let j=index ">{{i}}, {{j}}</td>-->
 </div>
 
