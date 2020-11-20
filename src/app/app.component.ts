@@ -34,11 +34,11 @@ export class AppComponent implements OnInit {
   }
 
   changeXandY() {
-    if (this.y > this.maximumY) {
-      this.y = this.maximumY;
+    if (this.y >= this.maximumY) {
+      this.y = this.maximumY - 1;
     }
-    if (this.x > this.maximumX) {
-      this.x = this.maximumX;
+    if (this.x >= this.maximumX) {
+      this.x = this.maximumX - 1;
     }
     if (this.orientation) {
       this.setVacuum();
@@ -51,34 +51,102 @@ export class AppComponent implements OnInit {
       if (i === this.x) {
         this.arrayY.forEach(j => {
           if (j === this.y) {
-            this.initializeOrientationVacuum(i, j);
+            this.setOrientationVacuum(i, j, this.orientation);
           }
         });
       }
     });
   }
 
-  initializeOrientationVacuum(i: number, j: number) {
+  setOrientationVacuum(i: number, j: number, orientation: any) {
     const firstPosition = document.getElementById(i + '-' + j);
-    if ( this.orientation === 'N' ) {
+    if (orientation === 'N') {
       firstPosition.innerHTML = '<i class="fa fa-2x fa-arrow-down"></i>';
-    } else if ( this.orientation === 'E' ) {
+    } else if (orientation === 'E') {
       firstPosition.innerHTML = '<i class="fa fa-2x fa-arrow-left"></i>';
-    } else if ( this.orientation === 'W' ) {
+    } else if (orientation === 'W') {
       firstPosition.innerHTML = '<i class="fa fa-2x fa-arrow-right"></i>';
-    } else if ( this.orientation === 'S' ) {
+    } else if (orientation === 'S') {
       firstPosition.innerHTML = '<i class="fa fa-2x fa-arrow-up"></i>';
     }
   }
+
   emptyMap() {
     this.arrayX.forEach((i) => {
-        this.arrayY.forEach(j => {
-          document.getElementById(i + '-' + j).innerText = '';
-        });
+      this.arrayY.forEach(j => {
+        document.getElementById(i + '-' + j).innerText = '';
+      });
     });
 
   }
+
   go() {
+    for (const v of this.instructions) {
+      this.doActionVacuum(v);
+    }
+    console.log('*********FINAL************');
+    console.log('(' + this.x + ',' + this.y + ') : ' + this.orientation);
   }
 
+  doActionVacuum(v: any) {
+    console.log('****', v)
+    if (v === 'D') {
+      this.doRotationD();
+      console.log('rot D')
+      console.log('(' + this.x + ',' + this.y + ') : ' + this.orientation);
+      this.setOrientationVacuum(this.x, this.y, this.orientation);
+    } else if (v === 'G') {
+      this.doRotationG();
+      console.log('rot G')
+      console.log('(' + this.x + ',' + this.y + ') : ' + this.orientation);
+      this.setOrientationVacuum(this.x, this.y, this.orientation);
+    } else if (v === 'A') {
+      this.doMove();
+      console.log('(' + this.x + ',' + this.y + ') : ' + this.orientation);
+      this.setOrientationVacuum(this.x, this.y, this.orientation);
+    }
+  }
+
+  doRotationD() {
+    console.log('Rotate D');
+    if (this.orientation === 'E') {
+      this.orientation = 'S';
+    } else if (this.orientation == 'N') {
+      this.orientation = 'E';
+    } else if (this.orientation === 'S') {
+      this.orientation = 'W';
+    } else if (this.orientation == 'W') {
+      this.orientation = 'N';
+    }
+  }
+
+  doRotationG() {
+    console.log('Rotate G');
+    if (this.orientation === 'E') {
+      this.orientation = 'N';
+    } else if (this.orientation == 'N') {
+      this.orientation = 'W';
+    } else if (this.orientation === 'S') {
+      this.orientation = 'E';
+    } else if (this.orientation == 'W') {
+      this.orientation = 'S';
+    }
+  }
+
+  doMove() {
+    if ((this.orientation === 'E') && (this.x !== 0)) {
+      this.x--;
+    } else if ((this.orientation == 'N') && (this.y !== this.maximumY + 1)) {
+      this.y++;
+    } else if ((this.orientation == 'S') && (this.y !== 0)) {
+      this.y--;
+    } else if ((this.orientation == 'W') && (this.x !== this.maximumX + 1)) {
+      this.x++;
+    }
+  }
+
+  reformatInstruction() {
+    const regexp = new RegExp('D*G*A*');
+    console.log(regexp.test(this.instructions));
+  }
 }

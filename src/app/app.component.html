@@ -17,7 +17,7 @@
   <tr>
     <td>Orientation :</td>
     <td>
-      <select [(ngModel)]="orientation" (change)="changeXandY()" [disabled]="!x && !y">
+      <select [(ngModel)]="orientation" (change)="changeXandY()">
         <option value="N">N</option>
         <option value="E">E</option>
         <option value="W">W</option>
@@ -27,15 +27,15 @@
   </tr>
   <tr *ngIf="orientation && (x!=='')  && (y!=='')">
     <td>Instructions : </td>
-    <td><input type="text" [(ngModel)]="instructions" pattern="[A-Z]*"></td>
+    <td><input type="text" [(ngModel)]="instructions" (keyup)="reformatInstruction()" pattern="[D*G*A*]*"></td>
     <td><input type="button" (click)="go()" value="GO"></td>
   </tr>
 </table>
 
 <div class="row" *ngIf="maximumY && maximumX">
   <table border="1" class="map">
-    <tr *ngFor="let i of arrayX">
-      <td *ngFor="let j of arrayY" id="{{i}}-{{j}}"></td>
+    <tr *ngFor="let i of arrayY">
+      <td *ngFor="let j of arrayX" id="{{j}}-{{i}}"></td>
     </tr>
   </table>
 </div>
