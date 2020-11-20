@@ -82,11 +82,11 @@ export class AppComponent implements OnInit {
 
   // GO button
   go() {
+    this.setInitialVacuumPosition();
     // parcourir l'instruction à executer
     for (const v of this.instructions) {
       this.doActionVacuum(v);
     }
-    console.log('*********FINAL************');
     alert(' (x,y) = (' + this.x + ',' + this.y + ') , Orientation ' + this.orientation);
   }
 
@@ -131,8 +131,6 @@ export class AppComponent implements OnInit {
     if ((this.orientation === 'E') && (this.x !== 0)) {
       this.x--;
     } else if ((this.orientation === 'N') && (this.y + 1 !== this.maximumY)) {
-      console.log(this.y)
-      console.log(this.maximumY)
       this.y++;
     } else if ((this.orientation === 'S') && (this.y !== 0)) {
       this.y--;
