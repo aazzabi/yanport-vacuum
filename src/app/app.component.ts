@@ -20,7 +20,7 @@ export class AppComponent implements OnInit {
   arrayY = [];
   arrayX = [];
   orientation: string;
-  instructions: '';
+  instructions: string;
 
   ngOnInit(): void {
   }
