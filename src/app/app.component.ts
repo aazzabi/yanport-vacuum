@@ -19,7 +19,7 @@ export class AppComponent implements OnInit {
   map: Matrix;
   arrayY = [];
   arrayX = [];
-  orientation: '';
+  orientation: string;
   instructions: '';
 
   ngOnInit(): void {
@@ -41,11 +41,11 @@ export class AppComponent implements OnInit {
       this.x = this.maximumX - 1;
     }
     if (this.orientation) {
-      this.setVacuum();
+      this.setInitialVacuumPosition();
     }
   }
 
-  setVacuum() {
+  setInitialVacuumPosition() {
     this.emptyMap();
     this.arrayX.forEach((i) => {
       if (i === this.x) {
@@ -80,73 +80,74 @@ export class AppComponent implements OnInit {
 
   }
 
+  // GO button
   go() {
+    // parcourir l'instruction à executer
     for (const v of this.instructions) {
       this.doActionVacuum(v);
     }
     console.log('*********FINAL************');
-    console.log('(' + this.x + ',' + this.y + ') : ' + this.orientation);
+    alert(' (x,y) = (' + this.x + ',' + this.y + ') , Orientation ' + this.orientation);
   }
 
   doActionVacuum(v: any) {
-    console.log('****', v)
     if (v === 'D') {
-      this.doRotationD();
-      console.log('rot D')
-      console.log('(' + this.x + ',' + this.y + ') : ' + this.orientation);
+      this.doRotation('D', this.orientation);
       this.setOrientationVacuum(this.x, this.y, this.orientation);
     } else if (v === 'G') {
-      this.doRotationG();
-      console.log('rot G')
-      console.log('(' + this.x + ',' + this.y + ') : ' + this.orientation);
+      this.doRotation('G', this.orientation);
       this.setOrientationVacuum(this.x, this.y, this.orientation);
     } else if (v === 'A') {
       this.doMove();
-      console.log('(' + this.x + ',' + this.y + ') : ' + this.orientation);
       this.setOrientationVacuum(this.x, this.y, this.orientation);
     }
   }
 
-  doRotationD() {
-    console.log('Rotate D');
-    if (this.orientation === 'E') {
-      this.orientation = 'S';
-    } else if (this.orientation == 'N') {
-      this.orientation = 'E';
-    } else if (this.orientation === 'S') {
-      this.orientation = 'W';
-    } else if (this.orientation == 'W') {
-      this.orientation = 'N';
-    }
-  }
-
-  doRotationG() {
-    console.log('Rotate G');
-    if (this.orientation === 'E') {
-      this.orientation = 'N';
-    } else if (this.orientation == 'N') {
-      this.orientation = 'W';
-    } else if (this.orientation === 'S') {
-      this.orientation = 'E';
-    } else if (this.orientation == 'W') {
-      this.orientation = 'S';
+  doRotation(direction: any, o: any) {
+    if (direction === 'D') {
+      if (o === 'E') {
+        this.orientation = 'S';
+      } else if (o === 'N') {
+        this.orientation = 'E';
+      } else if (o === 'S') {
+        this.orientation = 'W';
+      } else if (o === 'W') {
+        this.orientation = 'N';
+      }
+    } else if (direction === 'G') {
+      if (o === 'E') {
+        this.orientation = 'N';
+      } else if (o === 'N') {
+        this.orientation = 'W';
+      } else if (o === 'S') {
+        this.orientation = 'E';
+      } else if (o === 'W') {
+        this.orientation = 'S';
+      }
     }
   }
 
   doMove() {
     if ((this.orientation === 'E') && (this.x !== 0)) {
       this.x--;
-    } else if ((this.orientation == 'N') && (this.y !== this.maximumY + 1)) {
+    } else if ((this.orientation === 'N') && (this.y + 1 !== this.maximumY)) {
+      console.log(this.y)
+      console.log(this.maximumY)
       this.y++;
-    } else if ((this.orientation == 'S') && (this.y !== 0)) {
+    } else if ((this.orientation === 'S') && (this.y !== 0)) {
       this.y--;
-    } else if ((this.orientation == 'W') && (this.x !== this.maximumX + 1)) {
+    } else if ((this.orientation === 'W') && (this.x + 1 !== this.maximumX)) {
       this.x++;
     }
   }
 
   reformatInstruction() {
-    const regexp = new RegExp('D*G*A*');
-    console.log(regexp.test(this.instructions));
+    if (this.instructions) {
+      for (const v of this.instructions) {
+        if ((v !== 'A') && (v !== 'G') && (v !== 'D')) {
+          this.instructions = this.instructions.replace(v, '');
+        }
+      }
+    }
   }
 }
